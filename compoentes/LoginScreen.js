@@ -16,11 +16,7 @@ const LoginScreen = ({ navigation }) => {
      
     <View style={styles.container}>
 
-        <img 
-          src='https://grupofasipe.com.br/img/grupo-fasipe.png'
-          width="400px"
-          height="100px"
-        />
+        
       <TextInput
         placeholder="Username"
         value={username}

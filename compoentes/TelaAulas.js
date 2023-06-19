@@ -1,101 +1,181 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import styles from '../Estilo.js/style';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  Picker,
+} from 'react-native';
+import { Icon } from 'react-native-elements';
 
+export default function App() {
+  const [tasks, setTasks] = useState([]);
+  const [taskName, setTaskName] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [selectedTeacher, setSelectedTeacher] = useState('');
+  const [selectedDay, setSelectedDay] = useState('');
 
-const TelaAulas = () => {
-  const [nota, setNota] = useState('');
-  const [lembretes, setLembretes] = useState([]);
-  const [editIndex, setEditIndex] = useState(-1);
+  const addTask = () => {
+    if (
+      taskName.trim() !== '' &&
+      startTime.trim() !== '' &&
+      endTime.trim() !== '' &&
+      selectedTeacher.trim() !== '' &&
+      selectedDay.trim() !== ''
+    ) {
+      const newTask = {
+        id: Date.now().toString(),
+        name: taskName,
+        start: startTime,
+        end: endTime,
+        teacher: selectedTeacher,
+        day: selectedDay,
+      };
 
-  const navigation = useNavigation();
-
-
-  
-  const aulas = [
-    { dia: 'Segunda-feira', professor: 'Andre', sala: 'Sala 207' },
-    { dia: 'Terça-feira', professor: 'Borba', sala: 'LAB 2' },
-    { dia: 'Quarta-feira', professor: 'Fagner', sala: 'lab 2' },
-    { dia: 'Quinta-feira', professor: 'Andre', sala: '207' },
-    { dia: 'Sexta-Feira', professor: 'ihbrahin', sala: 'lab 4' },
-    { dia: 'Sabado', professor: 'Sofia', sala: 'Sala 217' },
-  ];
-
-  const handleSalvarNota = () => {
-    if (nota.trim() !== '') {
-      if (editIndex >= 0) {
-        const novosLembretes = [...lembretes];
-        novosLembretes[editIndex] = nota;
-        setLembretes(novosLembretes);
-        setEditIndex(-1);
-      } else {
-        setLembretes([...lembretes, nota]);
-      }
-      setNota('');
-      Alert.alert('Nota salva com sucesso!');
-    } else {
-      Alert.alert('Por favor, insira uma nota válida!');
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+      setTaskName('');
+      setStartTime('');
+      setEndTime('');
+      setSelectedTeacher('');
+      setSelectedDay('');
     }
   };
 
-  const handleApagarLembrete = (index) => {
-    const novosLembretes = [...lembretes];
-    novosLembretes.splice(index, 1);
-    setLembretes(novosLembretes);
+  const deleteTask = (taskId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
-  const handleEditarLembrete = (index) => {
-    setEditIndex(index);
-    setNota(lembretes[index]);
+  const renderTasksByDay = (day) => {
+    const filteredTasks = tasks.filter((task) => task.day === day);
+    return (
+      <FlatList
+        data={filteredTasks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.taskItem}
+            onPress={() => deleteTask(item.id)}
+          >
+            <View>
+              <Text style={styles.taskName}>{item.name}</Text>
+              <Text>{`Início: ${item.start}`}</Text>
+              <Text>{`Término: ${item.end}`}</Text>
+              <Text>{`Professor(a): ${item.teacher}`}</Text>
+            </View>
+            <Icon name="delete" type="material" size={24} color="red" />
+          </TouchableOpacity>
+        )}
+      />
+    );
   };
 
   return (
     <View style={styles.container}>
-
-        <img 
-          src='https://grupofasipe.com.br/img/grupo-fasipe.png'
-          width="200px"
-          height="100px"
-        />  
-
-      <Button title="Ir para outra tela" onPress={() => navigation.navigate('Calendario')} />
-
-      {aulas.map((aula, index) => (
-        <View key={index} style={styles.aulaContainer}>
-          <Text style={styles.diaSemana}>{aula.dia}</Text>
-          <Text>Professor: {aula.professor}</Text>
-          <Text>Sala: {aula.sala}</Text>
-        </View>
-      ))}
-
-      
-
-
-      <TextInput
-        style={styles.blocoNotas}
-        placeholder="Adicionar nota"
-        value={nota}
-        onChangeText={setNota}
-        multiline
-      />
-
-      <Button style={styles.Button} title="Salvar Nota" onPress={handleSalvarNota} />
-
-      <View style={styles.lembretesContainer}>
-        <Text style={styles.lembretesTitle}>Lembretes:</Text>
-        {lembretes.map((lembrete, index) => (
-          <View key={index} style={styles.lembreteContainer}>
-            <Text style={styles.lembrete}>{lembrete}</Text>
-            <Button title="Apagar" onPress={() => handleApagarLembrete(index)} />
-            <Button title="Editar" onPress={() => handleEditarLembrete(index)} />
-          </View>
-        ))}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome da tarefa"
+          value={taskName}
+          onChangeText={(text) => setTaskName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Hora de início"
+          value={startTime}
+          onChangeText={(text) => setStartTime(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Hora de término"
+          value={endTime}
+          onChangeText={(text) => setEndTime(text)}
+        />
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedTeacher}
+          onValueChange={(itemValue) => setSelectedTeacher(itemValue)}
+        >
+          <Picker.Item label="Selecione um professor" value="" />
+          <Picker.Item label="Professor" value="professor" />
+          <Picker.Item label="Professora" value="professora" />
+        </Picker>
+        <Picker
+          style={styles.picker}
+          selectedValue={selectedDay}
+          onValueChange={(itemValue) => setSelectedDay(itemValue)}
+        >
+          <Picker.Item label="Selecione um dia" value="" />
+          <Picker.Item label="Segunda-feira" value="segunda-feira" />
+          <Picker.Item label="Terça-feira" value="terca-feira" />
+          <Picker.Item label="Quarta-feira" value="quarta-feira" />
+          <Picker.Item label="Quinta-feira" value="quinta-feira" />
+          <Picker.Item label="Sexta-feira" value="sexta-feira" />
+        </Picker>
+        <Button title="Adicionar tarefa" onPress={addTask} />
+      </View>
+      <View style={styles.taskListContainer}>
+        <Text style={styles.taskListHeader}>Tarefas - Segunda-feira</Text>
+        {renderTasksByDay('segunda-feira')}
+      </View>
+      <View style={styles.taskListContainer}>
+        <Text style={styles.taskListHeader}>Tarefas - Terça-feira</Text>
+        {renderTasksByDay('terca-feira')}
+      </View>
+      <View style={styles.taskListContainer}>
+        <Text style={styles.taskListHeader}>Tarefas - Quarta-feira</Text>
+        {renderTasksByDay('quarta-feira')}
+      </View>
+      <View style={styles.taskListContainer}>
+        <Text style={styles.taskListHeader}>Tarefas - Quinta-feira</Text>
+        {renderTasksByDay('quinta-feira')}
+      </View>
+      <View style={styles.taskListContainer}>
+        <Text style={styles.taskListHeader}>Tarefas - Sexta-feira</Text>
+        {renderTasksByDay('sexta-feira')}
       </View>
     </View>
   );
-};
+}
 
-
-
-export default TelaAulas;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  picker: {
+    height: 40,
+    marginBottom: 10,
+  },
+  taskListContainer: {
+    marginBottom: 20,
+  },
+  taskListHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  taskItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  taskName: {
+    fontWeight: 'bold',
+  },
+});
