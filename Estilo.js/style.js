@@ -1,4 +1,5 @@
 import {StyleSheet } from "react-native"
+import { Directions } from "react-native-gesture-handler";
 import { Button } from "react-native-web";
 
 const styles = StyleSheet.create({
@@ -12,64 +13,30 @@ const styles = StyleSheet.create({
 
     input: {
       width: '80%',
-      height: 30,
-      borderWidth: 1,
+      height: 40,
+      borderWidth: 2,
       borderColor: '#008000',
-      marginBottom: 10,
-      paddingHorizontal: 10,
+      marginBottom: 30,
+      paddingHorizontal: 11,
+    },
+    Link:{
+      marginBottom: 30,
+
     },
 
-    aulaContainer: {
-        marginBottom: 16,
-      },
+    Buttonlogin:{
+      marginBottom: 300,
+      
+    },
+   
+      
+      
+  
+   
 
-      diaSemana: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-      },
+  
 
-      blocoNotas: {
-        marginTop: 16,
-        padding: 8,
-        borderWidth: 1,
-        borderColor: '#008000',
-        borderRadius: 7,
-        height: 100,
-        
-      },
-
-      lembretesContainer: {
-        marginTop: 16,
-        
-      },
-
-      lembretesTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-        
-      },
-
-      lembreteContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 8,
-      },
-
-      lembrete: {
-        fontSize: 16,
-        flex: 1,
-        marginRight: 8,
-      },
-
-    img:{
-        
-        width: '80px',
-        height: '30px',
-        
-
-    }
+    
   });
 
   export default styles ;

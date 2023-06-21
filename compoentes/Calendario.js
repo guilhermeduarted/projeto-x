@@ -29,7 +29,7 @@ const Calendario = () => {
       <Button title="Fechar Calendário" onPress={handleFecharCalendario} />
 
     <Text>
-        <Text></Text>
+        <Text>ola mundo</Text>
     </Text>
     </View>
 
