@@ -9,7 +9,10 @@ const Navbar = () => {
   const navigation = useNavigation();
 
 
- 
+  const auladias =() => {
+    const navigation = useNavigation("aulasdodia");
+  }
+
 
   const bololo = () => {
     navigation.navigate('Link1');
@@ -19,13 +22,14 @@ const Navbar = () => {
   return (
     <View style={styles.navbar}>
       <TouchableOpacity style={styles.navbarButton}>
-        <Text style={styles.navbarButtonText}>Página 1</Text>
+        <Text style={styles.navbarButtonText}>PAGIN PRINCIPAL</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navbarButton} onPress={()=>{Linking.openURL("https://fasipe.mentorweb.ws/fasipeSecurityG5/?pcaes=a205de9c60d3992e6296830743168a74")}}>
         <Text style={styles.navbarButtonText}>MENTOR FASIPE</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navbarButton} onPress={bololo}>
-        <Text style={styles.navbarButtonText}>Página 3</Text>
+      <TouchableOpacity style={styles.navbarButton}>
+        <Text style={styles.navbarButtonText}>HISTORICO
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 60,
-    backgroundColor: '#f0f0f0',
+    backgroundColor:"green",
     paddingHorizontal: 20,
   },
   navbarButton: {
